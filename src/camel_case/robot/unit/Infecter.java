@@ -13,5 +13,7 @@ public class Infecter extends Unit {
     if (tryAttackClosestEnemy()) {
       return;
     }
+
+    tryMoveRandom();
   }
 }

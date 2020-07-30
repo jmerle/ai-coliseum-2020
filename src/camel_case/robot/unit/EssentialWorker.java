@@ -10,6 +10,6 @@ public class EssentialWorker extends Unit {
 
   @Override
   public void run() {
-    // TODO: Implement
+    tryMoveRandom();
   }
 }

@@ -10,6 +10,6 @@ public class Fumigator extends Unit {
 
   @Override
   public void run() {
-    // TODO: Implement
+    tryMoveRandom();
   }
 }

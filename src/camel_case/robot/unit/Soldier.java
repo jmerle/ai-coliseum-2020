@@ -13,5 +13,7 @@ public class Soldier extends Unit {
     if (tryAttackClosestEnemy()) {
       return;
     }
+
+    tryMoveRandom();
   }
 }
