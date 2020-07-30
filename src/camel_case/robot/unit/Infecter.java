@@ -10,6 +10,8 @@ public class Infecter extends Unit {
 
   @Override
   public void run() {
-    // TODO: Implement
+    if (tryAttackClosestEnemy()) {
+      return;
+    }
   }
 }

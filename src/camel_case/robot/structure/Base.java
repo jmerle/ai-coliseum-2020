@@ -10,6 +10,8 @@ public class Base extends Structure {
 
   @Override
   public void run() {
-    // TODO: Implement
+    if (tryAttackClosestEnemy()) {
+      return;
+    }
   }
 }

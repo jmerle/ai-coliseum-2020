@@ -10,6 +10,8 @@ public class Soldier extends Unit {
 
   @Override
   public void run() {
-    // TODO: Implement
+    if (tryAttackClosestEnemy()) {
+      return;
+    }
   }
 }
