@@ -1,5 +1,6 @@
 package camel_case.robot.unit;
 
+import aic2020.user.Direction;
 import aic2020.user.UnitController;
 import aic2020.user.UnitType;
 
@@ -11,5 +12,14 @@ public class EssentialWorker extends Unit {
   @Override
   public void run() {
     tryMoveRandom();
+  }
+
+  private boolean tryBuildFarm(Direction direction) {
+    if (uc.canBuildFarm(direction)) {
+      uc.buildFarm(direction);
+      return true;
+    }
+
+    return false;
   }
 }

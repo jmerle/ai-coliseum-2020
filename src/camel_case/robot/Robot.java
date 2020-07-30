@@ -57,6 +57,15 @@ public abstract class Robot {
 
   public abstract void run();
 
+  protected boolean trySpawn(UnitType type, Direction direction) {
+    if (uc.canSpawn(type, direction)) {
+      uc.spawn(type, direction);
+      return true;
+    }
+
+    return false;
+  }
+
   protected boolean tryAttack(UnitInfo unit) {
     Location location = unit.getLocation();
 
