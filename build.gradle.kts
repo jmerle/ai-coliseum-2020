@@ -177,6 +177,8 @@ task<JavaExec>("runAndOpen") {
     group = "aic2020"
     description = "Runs a match and opens it in the client."
 
+    dependsOn += "run"
+
     main = "Client"
 
     doFirst {

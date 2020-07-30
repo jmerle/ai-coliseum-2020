@@ -1,4 +1,5 @@
 import Common.MainMenu.MainWindow;
+import ReplayVisualizer.Managers.ReplayManager;
 import ReplayVisualizer.UIObjects.ReplayWindow;
 import com.alee.laf.WebLookAndFeel;
 import java.io.File;
@@ -37,7 +38,18 @@ public class Client {
       replayFiles[i] = new File(args[i]);
     }
 
-    JFrame window = new ReplayWindow(replayFiles);
+    ReplayWindow window = new ReplayWindow(replayFiles);
     window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    try {
+      Field replayManagerField = window.getClass().getDeclaredField("replayManager");
+      replayManagerField.setAccessible(true);
+
+      ReplayManager replayManager = (ReplayManager) replayManagerField.get(window);
+      replayManager.ToggleVisuals();
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
   }
 }
