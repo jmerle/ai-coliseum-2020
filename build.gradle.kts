@@ -69,7 +69,7 @@ fun updateEngine() {
     }
 
     ZipFile(engineFile).use { zip ->
-        zip.entries().asIterator().forEach { entry ->
+        zip.entries().asSequence().forEach { entry ->
             if (entry.isDirectory) {
                 return@forEach
             }
