@@ -173,6 +173,23 @@ task<JavaExec>("run") {
     )
 }
 
+task<JavaExec>("runChallenge") {
+    group = "aic2020"
+    description = "Runs matches on all maps without starting the client."
+
+    dependsOn += "instrument"
+
+    main = "aic2020.main.Main"
+    jvmArgs = listOf("-noverify")
+    args = listOf(
+            project.property("package1").toString(),
+            project.property("package2").toString(),
+            project.property("map").toString(),
+            "0",
+            "1"
+    )
+}
+
 task<JavaExec>("runAndOpen") {
     group = "aic2020"
     description = "Runs a match and opens it in the client."
@@ -183,6 +200,21 @@ task<JavaExec>("runAndOpen") {
 
     doFirst {
         args = listOf(fileTree("games").maxBy { it.lastModified() }!!.absolutePath)
+    }
+}
+
+task<JavaExec>("runChallengeAndOpen") {
+    group = "aic2020"
+    description = "Runs matches on all maps and opens them in the client."
+
+    dependsOn += "runChallenge"
+
+    main = "Client"
+
+    doFirst {
+        val challengeDirectory = fileTree("challenges").maxBy { it.lastModified() }!!.parentFile
+        val challengeFiles = challengeDirectory.listFiles()!!.sortedBy { it.lastModified() }
+        args = challengeFiles.map { it.absolutePath }
     }
 }
 
