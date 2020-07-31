@@ -37,6 +37,7 @@ public abstract class Robot {
   };
 
   protected Map<UnitType, Integer> attackPriorities = new HashMap<>();
+  protected Map<Integer, int[][]> rangeOffsets = new HashMap<>();
 
   public Robot(UnitController uc, UnitType type) {
     this.uc = uc;
@@ -116,6 +117,40 @@ public abstract class Robot {
     }
 
     return false;
+  }
+
+  protected int[][] getRangeOffsets(int range) {
+    if (!rangeOffsets.containsKey(range)) {
+      Location root = new Location(0, 0);
+      List<Location> locationsInRange = new ArrayList<>(range);
+
+      int maxOffset = (int) Math.ceil(Math.sqrt(range));
+
+      for (int y = -maxOffset; y <= maxOffset; y++) {
+        for (int x = -maxOffset; x <= maxOffset; x++) {
+          if (x == 0 && y == 0) {
+            continue;
+          }
+
+          Location location = new Location(x, y);
+          if (location.distanceSquared(root) <= range) {
+            locationsInRange.add(location);
+          }
+        }
+      }
+
+      locationsInRange.sort(Comparator.comparingInt(location -> location.distanceSquared(root)));
+
+      int[][] offsets = new int[locationsInRange.size()][2];
+      for (int i = 0; i < offsets.length; i++) {
+        Location location = locationsInRange.get(i);
+        offsets[i] = new int[] {location.x, location.y};
+      }
+
+      rangeOffsets.put(range, offsets);
+    }
+
+    return rangeOffsets.get(range);
   }
 
   protected void drawLine(Location from, Location to, Color color) {
