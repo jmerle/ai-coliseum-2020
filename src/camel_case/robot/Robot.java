@@ -89,6 +89,10 @@ public abstract class Robot {
     return false;
   }
 
+  protected boolean trySpawn(TypeWrapper type, Location location) {
+    return isAdjacentTo(location) && trySpawn(type, directionTowards(location));
+  }
+
   protected boolean tryAttack(UnitInfo unit) {
     Location location = unit.getLocation();
 

@@ -29,37 +29,38 @@ public class EssentialWorker extends Unit {
       return false;
     }
 
-    uc.println("Orders: " + orders.size());
-
     Location myLocation = uc.getLocation();
     orders.sort(Comparator.comparingInt(order -> order.getLocation().distanceSquared(myLocation)));
 
-    BuildOrder activeOrder = orders.get(0);
+    BuildOrder activeOrder = null;
+    int toiletPaper = uc.getToiletPaper();
+
+    for (BuildOrder order : orders) {
+      if (order.getType().getCost() > toiletPaper) {
+        continue;
+      }
+
+      activeOrder = order;
+      break;
+    }
+
+    if (activeOrder == null) {
+      return false;
+    }
+
     Location orderLocation = activeOrder.getLocation();
 
     if (Locations.equals(orderLocation, myLocation)) {
       tryMoveRandom();
-      uc.println("Moving at random");
       return true;
     }
 
-    if (Locations.equals(orderLocation, currentTarget) && isStuck()) {
-      if (orders.size() == 1) {
-        return false;
-      }
-
-      activeOrder = orders.get(1);
-      orderLocation = activeOrder.getLocation();
-    }
-
-    if (isAdjacentTo(orderLocation)
-        && trySpawn(activeOrder.getType(), directionTowards(orderLocation))) {
+    if (trySpawn(activeOrder.getType(), orderLocation)) {
       buildQueue.removeOrder(activeOrder);
-      uc.println("Completed order");
       return true;
     }
 
-    uc.println("Moving from " + myLocation + " to " + orderLocation);
-    return tryMoveTo(orderLocation);
+    tryMoveTo(orderLocation);
+    return true;
   }
 }

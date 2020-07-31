@@ -1,9 +1,11 @@
 package camel_case.robot.structure;
 
 import aic2020.user.Direction;
+import aic2020.user.Location;
 import aic2020.user.UnitController;
 import aic2020.user.UnitInfo;
 import aic2020.user.UnitType;
+import camel_case.build.BuildOrder;
 import camel_case.type.TypeWrapper;
 
 public class Base extends Structure {
@@ -13,9 +15,18 @@ public class Base extends Structure {
 
   @Override
   public void run() {
+    visualizeOrders();
+
     if (uc.getRound() == 5) {
       for (Direction direction : adjacentDirections) {
-        buildQueue.addOrder(uc.getLocation().add(direction), orderableTypes.MARKET);
+        Location orderLocation = uc.getLocation().add(direction);
+
+        if (uc.isOutOfMap(orderLocation)) {
+          continue;
+        }
+
+        buildQueue.addOrder(orderLocation, orderableTypes.BARRACKS);
+        break;
       }
     }
 
@@ -35,12 +46,18 @@ public class Base extends Structure {
     }
   }
 
+  private void visualizeOrders() {
+    for (BuildOrder order : buildQueue.getOrders()) {
+      drawPoint(order.getLocation(), colors.WHITE);
+    }
+  }
+
   private TypeWrapper getRequiredUnit() {
-    if (countNearbyFriendlies(UnitType.ESSENTIAL_WORKER) < 3) {
+    if (countNearbyFriendlies(UnitType.ESSENTIAL_WORKER) < 1) {
       return spawnableTypes.ESSENTIAL_WORKER;
     }
 
-    if (countNearbyFriendlies(UnitType.FUMIGATOR) < 3) {
+    if (countNearbyFriendlies(UnitType.FUMIGATOR) < 2) {
       return spawnableTypes.FUMIGATOR;
     }
 

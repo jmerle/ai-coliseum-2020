@@ -29,6 +29,10 @@ public abstract class Unit extends Robot {
 
   protected boolean tryMove(Direction direction) {
     if (uc.canMove(direction)) {
+      if (currentTarget != null) {
+        drawLine(currentTarget, colors.YELLOW);
+      }
+
       uc.move(direction);
       return true;
     }
@@ -37,6 +41,7 @@ public abstract class Unit extends Robot {
   }
 
   protected boolean tryMoveRandom() {
+    currentTarget = null;
     Location hq = uc.getInitialLocation(myTeam);
 
     for (int i = 0; i < 10; i++) {
