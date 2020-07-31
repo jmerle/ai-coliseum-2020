@@ -33,6 +33,10 @@ public abstract class Unit extends Robot {
         drawLine(currentTarget, colors.YELLOW);
       }
 
+      if (lastHuggedWall != null) {
+        drawPoint(lastHuggedWall, colors.RED);
+      }
+
       uc.move(direction);
       return true;
     }

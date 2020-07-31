@@ -5,29 +5,20 @@ import aic2020.user.Location;
 import aic2020.user.UnitController;
 import aic2020.user.UnitInfo;
 import aic2020.user.UnitType;
-import camel_case.build.BuildOrder;
 import camel_case.type.TypeWrapper;
 
 public class Base extends Structure {
+  private boolean initialBuildOrdersDispatched = false;
+
   public Base(UnitController uc) {
     super(uc, UnitType.BASE);
   }
 
   @Override
   public void run() {
-    visualizeOrders();
-
-    if (uc.getRound() == 5) {
-      for (Direction direction : adjacentDirections) {
-        Location orderLocation = uc.getLocation().add(direction);
-
-        if (uc.isOutOfMap(orderLocation)) {
-          continue;
-        }
-
-        buildQueue.addOrder(orderLocation, orderableTypes.BARRACKS);
-        break;
-      }
+    if (!initialBuildOrdersDispatched) {
+      initialBuildOrdersDispatched = true;
+      dispatchInitialBuildOrders();
     }
 
     if (tryAttackClosestEnemy()) {
@@ -46,9 +37,23 @@ public class Base extends Structure {
     }
   }
 
-  private void visualizeOrders() {
-    for (BuildOrder order : buildQueue.getOrders()) {
-      drawPoint(order.getLocation(), colors.WHITE);
+  private void dispatchInitialBuildOrders() {
+    Location myLocation = uc.getLocation();
+    int x = 0;
+
+    for (int[] offset : getRangeOffsets(me.visionRange)) {
+      Location orderLocation = myLocation.add(offset[0], offset[1]);
+
+      if (uc.isOutOfMap(orderLocation)) {
+        continue;
+      }
+
+      buildQueue.addOrder(orderLocation, orderableTypes.FARM);
+      x++;
+
+      if (x == 5) {
+        break;
+      }
     }
   }
 

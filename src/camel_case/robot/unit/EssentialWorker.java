@@ -5,7 +5,6 @@ import aic2020.user.UnitController;
 import aic2020.user.UnitType;
 import camel_case.build.BuildOrder;
 import camel_case.util.Locations;
-import java.util.Comparator;
 import java.util.List;
 
 public class EssentialWorker extends Unit {
@@ -29,10 +28,10 @@ public class EssentialWorker extends Unit {
       return false;
     }
 
-    Location myLocation = uc.getLocation();
-    orders.sort(Comparator.comparingInt(order -> order.getLocation().distanceSquared(myLocation)));
-
     BuildOrder activeOrder = null;
+    int bestDistance = Integer.MAX_VALUE;
+
+    Location myLocation = uc.getLocation();
     int toiletPaper = uc.getToiletPaper();
 
     for (BuildOrder order : orders) {
@@ -40,8 +39,11 @@ public class EssentialWorker extends Unit {
         continue;
       }
 
-      activeOrder = order;
-      break;
+      int distance = order.getLocation().distanceSquared(myLocation);
+      if (distance < bestDistance) {
+        activeOrder = order;
+        bestDistance = distance;
+      }
     }
 
     if (activeOrder == null) {

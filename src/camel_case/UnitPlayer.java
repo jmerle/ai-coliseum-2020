@@ -19,6 +19,7 @@ import java.text.DecimalFormat;
 
 public class UnitPlayer {
   private DecimalFormat intFormatter = new DecimalFormat("###,###");
+  private boolean isFirstRound = true;
 
   public void run(UnitController uc) {
     Robot robot = createRobot(uc);
@@ -42,6 +43,11 @@ public class UnitPlayer {
       e.printStackTrace(new PrintWriter(stringWriter));
 
       uc.println(stringWriter.toString());
+    }
+
+    if (isFirstRound) {
+      isFirstRound = false;
+      return;
     }
 
     int endRound = uc.getRound();
