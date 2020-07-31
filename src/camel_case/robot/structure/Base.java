@@ -13,6 +13,12 @@ public class Base extends Structure {
 
   @Override
   public void run() {
+    if (uc.getRound() == 5) {
+      for (Direction direction : adjacentDirections) {
+        buildQueue.addOrder(uc.getLocation().add(direction), orderableTypes.MARKET);
+      }
+    }
+
     if (tryAttackClosestEnemy()) {
       return;
     }

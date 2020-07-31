@@ -12,6 +12,7 @@ import camel_case.color.Colors;
 import camel_case.type.OrderableTypes;
 import camel_case.type.SpawnableTypes;
 import camel_case.type.TypeWrapper;
+import camel_case.util.Locations;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -69,7 +70,7 @@ public abstract class Robot {
   public abstract void run();
 
   protected boolean trySpawn(TypeWrapper type, Direction direction) {
-    if (type == spawnableTypes.FARM) {
+    if (type.getUnitType() == null) {
       if (uc.canBuildFarm(direction)) {
         uc.buildFarm(direction);
         return true;
@@ -138,6 +139,40 @@ public abstract class Robot {
     }
 
     return false;
+  }
+
+  protected Direction directionTowards(Location from, Location to) {
+    if (from.x < to.x && from.y < to.y) {
+      return Direction.NORTHEAST;
+    } else if (from.x < to.x && from.y > to.y) {
+      return Direction.SOUTHEAST;
+    } else if (from.x > to.x && from.y < to.y) {
+      return Direction.NORTHWEST;
+    } else if (from.x > to.x && from.y > to.y) {
+      return Direction.SOUTHWEST;
+    } else if (from.x < to.x) {
+      return Direction.EAST;
+    } else if (from.x > to.x) {
+      return Direction.WEST;
+    } else if (from.y < to.y) {
+      return Direction.NORTH;
+    } else if (from.y > to.y) {
+      return Direction.SOUTH;
+    } else {
+      return Direction.ZERO;
+    }
+  }
+
+  protected Direction directionTowards(Location to) {
+    return directionTowards(uc.getLocation(), to);
+  }
+
+  protected boolean isAdjacentTo(Location a, Location b) {
+    return !a.equals(b) && Locations.equals(a.add(directionTowards(b)), b);
+  }
+
+  protected boolean isAdjacentTo(Location location) {
+    return isAdjacentTo(uc.getLocation(), location);
   }
 
   protected int[][] getRangeOffsets(int range) {

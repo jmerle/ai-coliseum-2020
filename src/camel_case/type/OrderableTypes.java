@@ -32,6 +32,6 @@ public class OrderableTypes {
       return BARRICADE;
     }
 
-    return null;
+    throw new IllegalArgumentException("Invalid id: " + id);
   }
 }

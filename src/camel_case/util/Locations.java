@@ -12,4 +12,16 @@ public class Locations {
     int y = num % 10000;
     return new Location(x, y);
   }
+
+  public static boolean equals(Location a, Location b) {
+    if (a == null && b == null) {
+      return true;
+    }
+
+    if (a == null || b == null) {
+      return false;
+    }
+
+    return a.x == b.x && a.y == b.y;
+  }
 }

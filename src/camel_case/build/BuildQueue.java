@@ -26,8 +26,6 @@ public class BuildQueue {
   public void update() {
     int nextIndex = getNextIndex();
 
-    boolean print = lastReadIndex == -1;
-
     for (int i = lastReadIndex + 1; i <= nextIndex - 1; i++) {
       int serialized = uc.read(COMM_OFFSET + 1 + i);
       lastReadIndex = i;
@@ -38,10 +36,6 @@ public class BuildQueue {
         BuildOrder order = BuildOrder.fromSerialized(serialized, orderableTypes);
         orders.put(Locations.toInt(order.getLocation()), order);
       }
-    }
-
-    if (print && lastReadIndex > -1) {
-      uc.println(lastReadIndex);
     }
   }
 

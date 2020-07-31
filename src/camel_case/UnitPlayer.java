@@ -23,10 +23,6 @@ public class UnitPlayer {
   public void run(UnitController uc) {
     Robot robot = createRobot(uc);
 
-    if (robot == null) {
-      return;
-    }
-
     //noinspection InfiniteLoopStatement
     while (true) {
       performTurn(uc, robot);
@@ -96,7 +92,6 @@ public class UnitPlayer {
       return new Hospital(uc);
     }
 
-    uc.println("Unknown unit type '" + type + "'");
-    return null;
+    throw new IllegalArgumentException("Unknown unit type: " + type);
   }
 }
