@@ -4,6 +4,7 @@ import aic2020.user.Direction;
 import aic2020.user.UnitController;
 import aic2020.user.UnitInfo;
 import aic2020.user.UnitType;
+import camel_case.type.TypeWrapper;
 
 public class Base extends Structure {
   public Base(UnitController uc) {
@@ -16,7 +17,7 @@ public class Base extends Structure {
       return;
     }
 
-    UnitType requiredUnit = getRequiredUnit();
+    TypeWrapper requiredUnit = getRequiredUnit();
     if (requiredUnit == null) {
       return;
     }
@@ -28,13 +29,13 @@ public class Base extends Structure {
     }
   }
 
-  private UnitType getRequiredUnit() {
+  private TypeWrapper getRequiredUnit() {
     if (countNearbyFriendlies(UnitType.ESSENTIAL_WORKER) < 3) {
-      return UnitType.ESSENTIAL_WORKER;
+      return spawnableTypes.ESSENTIAL_WORKER;
     }
 
     if (countNearbyFriendlies(UnitType.FUMIGATOR) < 3) {
-      return UnitType.FUMIGATOR;
+      return spawnableTypes.FUMIGATOR;
     }
 
     return null;

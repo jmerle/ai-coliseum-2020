@@ -39,6 +39,7 @@ public class UnitPlayer {
     int startEnergy = uc.getEnergyUsed();
 
     try {
+      robot.getBuildQueue().update();
       robot.run();
     } catch (Exception e) {
       StringWriter stringWriter = new StringWriter();

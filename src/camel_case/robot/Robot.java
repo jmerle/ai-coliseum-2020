@@ -6,8 +6,12 @@ import aic2020.user.Team;
 import aic2020.user.UnitController;
 import aic2020.user.UnitInfo;
 import aic2020.user.UnitType;
+import camel_case.build.BuildQueue;
 import camel_case.color.Color;
 import camel_case.color.Colors;
+import camel_case.type.OrderableTypes;
+import camel_case.type.SpawnableTypes;
+import camel_case.type.TypeWrapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -23,7 +27,14 @@ public abstract class Robot {
   protected Team myTeam;
   protected Team enemyTeam;
 
+  protected BuildQueue buildQueue;
+
+  protected Map<UnitType, Integer> attackPriorities = new HashMap<>();
+  protected Map<Integer, int[][]> rangeOffsets = new HashMap<>();
+
   protected Colors colors = new Colors();
+  protected OrderableTypes orderableTypes = new OrderableTypes();
+  protected SpawnableTypes spawnableTypes = new SpawnableTypes();
 
   protected Direction[] adjacentDirections = {
     Direction.NORTH,
@@ -36,9 +47,6 @@ public abstract class Robot {
     Direction.NORTHWEST
   };
 
-  protected Map<UnitType, Integer> attackPriorities = new HashMap<>();
-  protected Map<Integer, int[][]> rangeOffsets = new HashMap<>();
-
   public Robot(UnitController uc, UnitType type) {
     this.uc = uc;
 
@@ -46,6 +54,8 @@ public abstract class Robot {
 
     myTeam = uc.getTeam();
     enemyTeam = myTeam.getOpponent();
+
+    buildQueue = new BuildQueue(uc);
 
     attackPriorities.put(UnitType.BASE, 10);
     attackPriorities.put(UnitType.SOLDIER, 9);
@@ -58,9 +68,20 @@ public abstract class Robot {
 
   public abstract void run();
 
-  protected boolean trySpawn(UnitType type, Direction direction) {
-    if (uc.canSpawn(type, direction)) {
-      uc.spawn(type, direction);
+  protected boolean trySpawn(TypeWrapper type, Direction direction) {
+    if (type == spawnableTypes.FARM) {
+      if (uc.canBuildFarm(direction)) {
+        uc.buildFarm(direction);
+        return true;
+      }
+
+      return false;
+    }
+
+    UnitType unitType = type.getUnitType();
+
+    if (uc.canSpawn(unitType, direction)) {
+      uc.spawn(unitType, direction);
       return true;
     }
 
@@ -163,5 +184,9 @@ public abstract class Robot {
 
   protected void drawPoint(Location location, Color color) {
     uc.drawPoint(location, color.getRed(), color.getGreen(), color.getBlue());
+  }
+
+  public BuildQueue getBuildQueue() {
+    return buildQueue;
   }
 }
