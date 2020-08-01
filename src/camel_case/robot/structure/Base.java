@@ -41,7 +41,7 @@ public class Base extends Structure {
     Location myLocation = uc.getLocation();
     int x = 0;
 
-    for (int[] offset : getRangeOffsets(me.visionRange)) {
+    for (int[] offset : offsets.getRangeOffsets(me.visionRange)) {
       Location orderLocation = myLocation.add(offset[0], offset[1]);
 
       if (uc.isOutOfMap(orderLocation)) {
