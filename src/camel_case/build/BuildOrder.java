@@ -1,8 +1,8 @@
 package camel_case.build;
 
 import aic2020.user.Location;
-import camel_case.type.OrderableTypes;
 import camel_case.type.TypeWrapper;
+import camel_case.type.WrapperTypes;
 
 public class BuildOrder {
   private Location location;
@@ -26,14 +26,14 @@ public class BuildOrder {
     return Integer.parseInt(str);
   }
 
-  public static BuildOrder fromSerialized(int serialized, OrderableTypes orderableTypes) {
+  public static BuildOrder fromSerialized(int serialized, WrapperTypes wrapperTypes) {
     String str = Integer.toString(serialized);
 
     int id = Integer.parseInt(str.substring(0, 1));
     int x = Integer.parseInt(str.substring(1, 5));
     int y = Integer.parseInt(str.substring(5, 9));
 
-    return new BuildOrder(new Location(x, y), orderableTypes.fromId(id));
+    return new BuildOrder(new Location(x, y), wrapperTypes.fromId(id));
   }
 
   private String padCoordinate(int coordinate) {

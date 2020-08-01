@@ -9,9 +9,8 @@ import aic2020.user.UnitType;
 import camel_case.build.BuildQueue;
 import camel_case.color.Color;
 import camel_case.color.Colors;
-import camel_case.type.OrderableTypes;
-import camel_case.type.SpawnableTypes;
 import camel_case.type.TypeWrapper;
+import camel_case.type.WrapperTypes;
 import camel_case.util.Locations;
 import camel_case.util.Offsets;
 import java.util.ArrayList;
@@ -34,9 +33,7 @@ public abstract class Robot {
   protected Map<UnitType, Integer> attackPriorities = new HashMap<>();
 
   protected Colors colors = new Colors();
-  protected OrderableTypes orderableTypes = new OrderableTypes();
-  protected SpawnableTypes spawnableTypes = new SpawnableTypes();
-
+  protected WrapperTypes wrapperTypes = new WrapperTypes();
   protected Offsets offsets = new Offsets();
 
   protected Direction[] adjacentDirections = {
@@ -79,7 +76,7 @@ public abstract class Robot {
   public abstract void run();
 
   protected boolean trySpawn(TypeWrapper type, Direction direction) {
-    if (type.getUnitType() == null) {
+    if (type.getId() == wrapperTypes.FARM.getId()) {
       if (uc.canBuildFarm(direction)) {
         uc.buildFarm(direction);
         return true;
@@ -152,6 +149,19 @@ public abstract class Robot {
     }
 
     return false;
+  }
+
+  protected int countNearbyFriendlies(UnitType type) {
+    UnitInfo[] units = uc.senseUnits(myTeam);
+    int total = 0;
+
+    for (UnitInfo unit : units) {
+      if (unit.getType() == type) {
+        total++;
+      }
+    }
+
+    return total;
   }
 
   protected Direction directionTowards(Location from, Location to) {

@@ -52,6 +52,7 @@ public abstract class Unit extends Robot {
 
   protected boolean tryMoveRandom() {
     bugTarget = null;
+
     Location hq = uc.getInitialLocation(myTeam);
 
     for (int i = 0; i < 10; i++) {

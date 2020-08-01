@@ -11,7 +11,7 @@ public class Barracks extends Structure {
   @Override
   public void run() {
     for (Direction direction : adjacentDirections) {
-      if (trySpawn(spawnableTypes.SOLDIER, direction)) {
+      if (trySpawn(wrapperTypes.SOLDIER, direction)) {
         return;
       }
     }

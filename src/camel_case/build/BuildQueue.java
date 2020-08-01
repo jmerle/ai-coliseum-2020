@@ -2,8 +2,8 @@ package camel_case.build;
 
 import aic2020.user.Location;
 import aic2020.user.UnitController;
-import camel_case.type.OrderableTypes;
 import camel_case.type.TypeWrapper;
+import camel_case.type.WrapperTypes;
 import camel_case.util.Locations;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class BuildQueue {
   private final int COMM_OFFSET = 10000;
-  private final OrderableTypes orderableTypes = new OrderableTypes();
+  private final WrapperTypes wrapperTypes = new WrapperTypes();
 
   private UnitController uc;
   private Map<Integer, BuildOrder> orders = new HashMap<>();
@@ -33,7 +33,7 @@ public class BuildQueue {
       if (serialized < 0) {
         orders.remove(serialized * -1);
       } else {
-        BuildOrder order = BuildOrder.fromSerialized(serialized, orderableTypes);
+        BuildOrder order = BuildOrder.fromSerialized(serialized, wrapperTypes);
         orders.put(Locations.toInt(order.getLocation()), order);
       }
     }
@@ -47,7 +47,7 @@ public class BuildQueue {
     int locationNum = Locations.toInt(location);
 
     BuildOrder currentOrder = orders.get(locationNum);
-    if (currentOrder != null && currentOrder.getType() == type) {
+    if (currentOrder != null && currentOrder.getType().getId() == type.getId()) {
       return;
     }
 

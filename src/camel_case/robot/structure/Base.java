@@ -3,7 +3,6 @@ package camel_case.robot.structure;
 import aic2020.user.Direction;
 import aic2020.user.Location;
 import aic2020.user.UnitController;
-import aic2020.user.UnitInfo;
 import aic2020.user.UnitType;
 import camel_case.build.Blueprint;
 import camel_case.build.MapAnalyzer;
@@ -34,8 +33,6 @@ public class Base extends Structure {
       return;
     }
 
-    requiredUnit = spawnableTypes.ESSENTIAL_WORKER;
-
     for (Direction direction : adjacentDirections) {
       if (trySpawn(requiredUnit, direction)) {
         return;
@@ -47,11 +44,21 @@ public class Base extends Structure {
     Blueprint blueprint = new Blueprint(uc);
     MapAnalyzer analyzer = new MapAnalyzer(uc);
 
-    for (int[] offset : offsets.getRingOffsets(4)) {
+    for (int[] offset : offsets.getRingOffsets(3)) {
       Location structureLocation = Locations.applyOffset(myLocation, offset);
 
       if (analyzer.isBuildable(structureLocation)) {
-        blueprint.addStructure(structureLocation, orderableTypes.BARRICADE);
+        blueprint.addStructure(structureLocation, wrapperTypes.BARRICADE);
+      }
+    }
+
+    int[][] ringOneOffsets = offsets.getRingOffsets(1);
+    for (int i = 0; i < ringOneOffsets.length; i++) {
+      Location structureLocation = Locations.applyOffset(myLocation, ringOneOffsets[i]);
+
+      if (analyzer.isBuildable(structureLocation)) {
+        blueprint.addStructure(structureLocation, wrapperTypes.BARRACKS);
+        break;
       }
     }
 
@@ -59,27 +66,10 @@ public class Base extends Structure {
   }
 
   private TypeWrapper getRequiredUnit() {
-    if (countNearbyFriendlies(UnitType.ESSENTIAL_WORKER) < 1) {
-      return spawnableTypes.ESSENTIAL_WORKER;
-    }
-
-    if (countNearbyFriendlies(UnitType.FUMIGATOR) < 2) {
-      return spawnableTypes.FUMIGATOR;
+    if (countNearbyFriendlies(UnitType.ESSENTIAL_WORKER) < 2) {
+      return wrapperTypes.ESSENTIAL_WORKER;
     }
 
     return null;
-  }
-
-  private int countNearbyFriendlies(UnitType type) {
-    UnitInfo[] units = uc.senseUnits(myTeam);
-    int total = 0;
-
-    for (UnitInfo unit : units) {
-      if (unit.getType() == type) {
-        total++;
-      }
-    }
-
-    return total;
   }
 }
