@@ -45,11 +45,6 @@ public class UnitPlayer {
       uc.println(stringWriter.toString());
     }
 
-    if (isFirstRound) {
-      isFirstRound = false;
-      return;
-    }
-
     int endRound = uc.getRound();
     int endEnergy = uc.getEnergyUsed();
 
@@ -68,11 +63,13 @@ public class UnitPlayer {
     if (percentage >= 90.0) {
       uc.println(
           String.format(
-              "High bytecode usage: %s/%s (%s%%)",
+              "High bytecode usage: %s/%s (%s%%)" + (isFirstRound ? " (unit's first round)" : ""),
               intFormatter.format(totalEnergy),
               intFormatter.format(maxEnergy),
               intFormatter.format((int) Math.round(percentage))));
     }
+
+    isFirstRound = false;
   }
 
   private Robot createRobot(UnitController uc) {

@@ -46,6 +46,11 @@ public class BuildQueue {
   public void addOrder(Location location, TypeWrapper type) {
     int locationNum = Locations.toInt(location);
 
+    BuildOrder currentOrder = orders.get(locationNum);
+    if (currentOrder != null && currentOrder.getType() == type) {
+      return;
+    }
+
     BuildOrder order = new BuildOrder(location, type);
     orders.put(locationNum, order);
 

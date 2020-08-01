@@ -50,10 +50,10 @@ public abstract class Robot {
     Direction.NORTHWEST
   };
 
-  public Robot(UnitController uc, UnitType type) {
+  public Robot(UnitController uc) {
     this.uc = uc;
 
-    me = type;
+    me = uc.getType();
 
     myTeam = uc.getTeam();
     enemyTeam = myTeam.getOpponent();

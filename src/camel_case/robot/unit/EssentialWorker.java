@@ -2,14 +2,13 @@ package camel_case.robot.unit;
 
 import aic2020.user.Location;
 import aic2020.user.UnitController;
-import aic2020.user.UnitType;
 import camel_case.build.BuildOrder;
 import camel_case.util.Locations;
 import java.util.List;
 
 public class EssentialWorker extends Unit {
   public EssentialWorker(UnitController uc) {
-    super(uc, UnitType.ESSENTIAL_WORKER);
+    super(uc);
   }
 
   @Override

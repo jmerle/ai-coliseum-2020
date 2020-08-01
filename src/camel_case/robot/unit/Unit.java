@@ -19,8 +19,8 @@ public abstract class Unit extends Robot {
   private int distanceToTarget;
   private int turnsSpentMovingTowardsTarget;
 
-  public Unit(UnitController uc, UnitType type) {
-    super(uc, type);
+  public Unit(UnitController uc) {
+    super(uc);
   }
 
   protected boolean isStuck() {

@@ -13,6 +13,10 @@ public class Locations {
     return new Location(x, y);
   }
 
+  public static Location applyOffset(Location location, int[] offset) {
+    return location.add(offset[0], offset[1]);
+  }
+
   public static boolean equals(Location a, Location b) {
     if (a == null && b == null) {
       return true;

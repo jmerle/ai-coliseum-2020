@@ -6,12 +6,13 @@ import aic2020.user.UnitController;
 import aic2020.user.UnitInfo;
 import aic2020.user.UnitType;
 import camel_case.type.TypeWrapper;
+import camel_case.build.MapAnalyzer;
 
 public class Base extends Structure {
   private boolean initialBuildOrdersDispatched = false;
 
   public Base(UnitController uc) {
-    super(uc, UnitType.BASE);
+    super(uc);
   }
 
   @Override
@@ -38,21 +39,12 @@ public class Base extends Structure {
   }
 
   private void dispatchInitialBuildOrders() {
-    Location myLocation = uc.getLocation();
-    int x = 0;
+    MapAnalyzer analyzer = new MapAnalyzer(uc);
 
-    for (int[] offset : offsets.getRangeOffsets(me.visionRange)) {
-      Location orderLocation = myLocation.add(offset[0], offset[1]);
-
-      if (uc.isOutOfMap(orderLocation)) {
-        continue;
-      }
-
-      buildQueue.addOrder(orderLocation, orderableTypes.FARM);
-      x++;
-
-      if (x == 5) {
-        break;
+    Location[] visibleLocations = uc.getVisibleLocations();
+    for (Location location : visibleLocations) {
+      if (analyzer.isBuildable(location)) {
+        drawPoint(location, colors.RED);
       }
     }
   }
