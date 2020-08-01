@@ -5,11 +5,13 @@ import aic2020.user.Location;
 import aic2020.user.UnitController;
 import aic2020.user.UnitInfo;
 import aic2020.user.UnitType;
-import camel_case.type.TypeWrapper;
+import camel_case.build.Blueprint;
 import camel_case.build.MapAnalyzer;
+import camel_case.type.TypeWrapper;
+import camel_case.util.Locations;
 
 public class Base extends Structure {
-  private boolean initialBuildOrdersDispatched = false;
+  private Blueprint blueprint;
 
   public Base(UnitController uc) {
     super(uc);
@@ -17,10 +19,11 @@ public class Base extends Structure {
 
   @Override
   public void run() {
-    if (!initialBuildOrdersDispatched) {
-      initialBuildOrdersDispatched = true;
-      dispatchInitialBuildOrders();
+    if (blueprint == null) {
+      blueprint = createBlueprint();
     }
+
+    blueprint.dispatchOrders(buildQueue);
 
     if (tryAttackClosestEnemy()) {
       return;
@@ -38,15 +41,21 @@ public class Base extends Structure {
     }
   }
 
-  private void dispatchInitialBuildOrders() {
-    MapAnalyzer analyzer = new MapAnalyzer(uc);
+  private Blueprint createBlueprint() {
+    Blueprint blueprint = new Blueprint(uc);
 
-    Location[] visibleLocations = uc.getVisibleLocations();
-    for (Location location : visibleLocations) {
-      if (analyzer.isBuildable(location)) {
-        drawPoint(location, colors.RED);
+    MapAnalyzer analyzer = new MapAnalyzer(uc);
+    Location myLocation = uc.getLocation();
+
+    for (int[] offset : offsets.getRingOffsets(1)) {
+      Location structureLocation = Locations.applyOffset(myLocation, offset);
+
+      if (analyzer.isBuildable(structureLocation)) {
+        blueprint.addStructure(structureLocation, orderableTypes.BARRICADE);
       }
     }
+
+    return blueprint;
   }
 
   private TypeWrapper getRequiredUnit() {
