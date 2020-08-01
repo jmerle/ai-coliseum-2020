@@ -34,6 +34,8 @@ public class Base extends Structure {
       return;
     }
 
+    requiredUnit = spawnableTypes.ESSENTIAL_WORKER;
+
     for (Direction direction : adjacentDirections) {
       if (trySpawn(requiredUnit, direction)) {
         return;
