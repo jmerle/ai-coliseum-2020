@@ -50,6 +50,8 @@ public abstract class Robot {
     Direction.NORTHWEST
   };
 
+  protected Location myLocation;
+
   public Robot(UnitController uc) {
     this.uc = uc;
 
@@ -67,6 +69,11 @@ public abstract class Robot {
     attackPriorities.put(UnitType.BARRACKS, 6);
     attackPriorities.put(UnitType.HOSPITAL, 5);
     attackPriorities.put(UnitType.BARRICADE, 4);
+  }
+
+  public void update() {
+    buildQueue.update();
+    myLocation = uc.getLocation();
   }
 
   public abstract void run();
@@ -134,7 +141,7 @@ public abstract class Robot {
         Comparator.comparingInt(
             unit -> {
               int priority = attackPriorities.getOrDefault(unit.getType(), Integer.MIN_VALUE);
-              int distance = uc.getLocation().distanceSquared(unit.getLocation());
+              int distance = myLocation.distanceSquared(unit.getLocation());
               return -priority * 10000 + distance;
             }));
 
@@ -170,7 +177,7 @@ public abstract class Robot {
   }
 
   protected Direction directionTowards(Location to) {
-    return directionTowards(uc.getLocation(), to);
+    return directionTowards(myLocation, to);
   }
 
   protected boolean isAdjacentTo(Location a, Location b) {
@@ -178,7 +185,7 @@ public abstract class Robot {
   }
 
   protected boolean isAdjacentTo(Location location) {
-    return isAdjacentTo(uc.getLocation(), location);
+    return isAdjacentTo(myLocation, location);
   }
 
   protected void drawLine(Location from, Location to, Color color) {
@@ -186,14 +193,10 @@ public abstract class Robot {
   }
 
   protected void drawLine(Location to, Color color) {
-    drawLine(uc.getLocation(), to, color);
+    drawLine(myLocation, to, color);
   }
 
   protected void drawPoint(Location location, Color color) {
     uc.drawPoint(location, color.getRed(), color.getGreen(), color.getBlue());
-  }
-
-  public BuildQueue getBuildQueue() {
-    return buildQueue;
   }
 }

@@ -43,11 +43,9 @@ public class Base extends Structure {
 
   private Blueprint createBlueprint() {
     Blueprint blueprint = new Blueprint(uc);
-
     MapAnalyzer analyzer = new MapAnalyzer(uc);
-    Location myLocation = uc.getLocation();
 
-    for (int[] offset : offsets.getRingOffsets(1)) {
+    for (int[] offset : offsets.getRingOffsets(2)) {
       Location structureLocation = Locations.applyOffset(myLocation, offset);
 
       if (analyzer.isBuildable(structureLocation)) {

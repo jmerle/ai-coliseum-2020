@@ -30,7 +30,6 @@ public class EssentialWorker extends Unit {
     BuildOrder activeOrder = null;
     int bestDistance = Integer.MAX_VALUE;
 
-    Location myLocation = uc.getLocation();
     int toiletPaper = uc.getToiletPaper();
 
     for (BuildOrder order : orders) {
