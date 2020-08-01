@@ -28,7 +28,7 @@ public class EssentialWorker extends Unit {
     }
 
     BuildOrder activeOrder = null;
-    int bestDistance = Integer.MAX_VALUE;
+    int bestCost = Integer.MAX_VALUE;
 
     int toiletPaper = uc.getToiletPaper();
 
@@ -37,10 +37,9 @@ public class EssentialWorker extends Unit {
         continue;
       }
 
-      int distance = order.getLocation().distanceSquared(myLocation);
-      if (distance < bestDistance) {
+      if (order.getType().getCost() < bestCost) {
         activeOrder = order;
-        bestDistance = distance;
+        bestCost = order.getType().getCost();
       }
     }
 

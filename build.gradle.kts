@@ -153,6 +153,12 @@ for (i in 1..2) {
         classpath = sourceSets.main.get().runtimeClasspath
         main = "instrumenter.Main"
         args = listOf(file("$buildDir/classes/$packageName").absolutePath, packageName, "true")
+
+        if (i == 2) {
+            onlyIf {
+                project.property("package1") != project.property("package2")
+            }
+        }
     }
 }
 
