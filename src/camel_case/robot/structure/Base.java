@@ -70,6 +70,10 @@ public class Base extends Structure {
       return wrapperTypes.ESSENTIAL_WORKER;
     }
 
+    if (countNearbyFriendlies(UnitType.FUMIGATOR) * 3 < countNearbyFriendlies(UnitType.SOLDIER)) {
+      return wrapperTypes.FUMIGATOR;
+    }
+
     return null;
   }
 }

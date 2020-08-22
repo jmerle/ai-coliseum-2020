@@ -65,6 +65,7 @@ public abstract class Unit extends Robot {
 
       if (tryMove(direction)) {
         return true;
+
       }
     }
 
